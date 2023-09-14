@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.mvvmtodolist.databinding.BookmarkFragmentBinding
+import com.example.mvvmtodolist.main.MainActivity
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
 
 class BookmarkFragment : Fragment() {
@@ -25,7 +26,8 @@ class BookmarkFragment : Fragment() {
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->
-            Toast.makeText(context,"position",Toast.LENGTH_SHORT).show()
+            modifyItemAtTodoTab(item)
+            removeItem(item,position)//변화시 item 삭제
         }
     }
 
@@ -60,8 +62,18 @@ class BookmarkFragment : Fragment() {
         super.onDestroyView()
     }
 
-    fun addItem(item : BookmarkModel) {
+    fun addItem(
+        item : BookmarkModel
+    ) {
         viewModel.addBookmarkItem(item)
+    }
+
+    fun removeItem(item : BookmarkModel ,position: Int? = null) {
+        viewModel.removeBookmarkItem(item,position)
+    }
+
+    private fun modifyItemAtTodoTab(item: BookmarkModel) {
+        (activity as MainActivity).modifyTodoItem(item)
     }
 
 

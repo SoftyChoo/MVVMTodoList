@@ -49,12 +49,17 @@ class BookmarkListAdapter(
         fun bind(item: BookmarkModel) = with(binding) {
             title.text = item.title
             description.text = item.description
+            bookmark.isChecked = item.isBookmark
 
-            bookmark.setOnClickListener {
-                onBookmarkChecked(
-                    adapterPosition,
-                    item
-                )
+            bookmark.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (item.isBookmark != isChecked) {
+                    onBookmarkChecked(
+                        adapterPosition,
+                        item.copy(
+                            isBookmark = isChecked
+                        )
+                    )
+                }
             }
         }
     }

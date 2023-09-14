@@ -32,45 +32,9 @@ class TodoListAdapter(
         // ->> ** areItemsTheSame, areContentsTheSame DiffUtil을 판단해 데이터를 갱신해주는 역할을 하는 함수 **
     }
 ) {
-
     //ListAdapter는 기존에 사용하고 있던 리스트를 재활용하지 못한다.
     //그 이유는 기존에 들어왔던 ArrayList와 새로 들어온 ArrayList를 다르게 인식하기 때문에
     //submit(list)를 할 경우에 새로운 ArrayList의 인스턴스를 생성해서 넣어줘야한다.
-
-    fun addItem(todoModel: TodoModel?) {
-        val list = currentList.toMutableList()
-        list.add(todoModel)
-        submitList(list)
-    }
-
-    fun addItems(items: List<TodoModel>) {
-        submitList(items)
-    }
-
-    fun modifyItem(
-        position: Int?,
-        todoModel: TodoModel?
-    ) {
-        if (position == null || todoModel == null) {
-            return
-        }
-
-        val list = currentList.toMutableList()
-        list[position] = todoModel
-        submitList(list)
-    }
-
-    fun removeItem(
-        position: Int?
-    ) {
-        if (position == null) {
-            return
-        }
-        val list = currentList.toMutableList()
-        list.removeAt(position)
-        submitList(list)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {// item 생성
         return ViewHolder(
             TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),

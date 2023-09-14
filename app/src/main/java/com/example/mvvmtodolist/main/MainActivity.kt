@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mvvmtodolist.R
 import com.example.mvvmtodolist.bookmark.BookmarkFragment
+import com.example.mvvmtodolist.bookmark.BookmarkModel
+import com.example.mvvmtodolist.bookmark.toTodoModel
 import com.example.mvvmtodolist.databinding.MainActivityBinding
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
 import com.example.mvvmtodolist.todo.home.TodoFragment
@@ -77,14 +79,26 @@ class MainActivity : AppCompatActivity() {
                 TodoContentActivity.newIntentForAdd(this@MainActivity)
             )
         }
-
-
     }
 
     fun addBookmarkItem(item: TodoModel) {
         val fragment = viewPagerAdapter.getFragment(1) as? BookmarkFragment //BookmarkFragment로 캐스팅을 해 다른 값이 넘어오면 널 반환
         fragment?.addItem(item.toBookmarkModel()) // TodoModel을 BookmarkModel로 변환하여 추가
     }
+
+    fun removeBookmarkItem(item: TodoModel) {
+        val fragment = viewPagerAdapter.getFragment(1) as? BookmarkFragment
+        fragment?.removeItem(
+            item = item.toBookmarkModel()
+        )
+    }
+
+    fun modifyTodoItem(item: BookmarkModel) {
+        val fragment = viewPagerAdapter.getFragment(0) as? TodoFragment
+        fragment?.modifyTodoItem(item.toTodoModel())
+    }
+
+
 
 
 }
