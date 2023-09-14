@@ -24,7 +24,7 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
                         idGenerate.getAndIncrement(),
                         title = "title $i",
                         description = "description $i",
-                        bookmark = false
+                        isBookmark = false
                     )
                 )
             }
@@ -82,6 +82,4 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
         currentList[findPosition] = todoModel
         _list.value = currentList
     }
-
-
 }

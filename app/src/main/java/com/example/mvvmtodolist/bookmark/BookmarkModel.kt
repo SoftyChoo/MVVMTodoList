@@ -5,8 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class BookmarkModel(
-    val id: Int,
-    val title: String,
-    val description: String,
-    val bookmark: Boolean
+    val id: Long,
+    val title: String?,
+    val description: String?,
+    val isBookmark: Boolean = false
 ) : Parcelable

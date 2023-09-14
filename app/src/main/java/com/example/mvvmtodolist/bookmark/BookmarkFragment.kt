@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.mvvmtodolist.databinding.BookmarkFragmentBinding
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
 
@@ -19,6 +20,8 @@ class BookmarkFragment : Fragment() {
 
     private var _binding: BookmarkFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel : BookmarkViewModel by viewModels()
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->
@@ -38,7 +41,14 @@ class BookmarkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initModel()
+    }
 
+    private fun initModel() = with(viewModel) {
+        // viewModel 상 읽기용 list
+        list.observe(viewLifecycleOwner) { // Fragment LV : observe(viewLifecycleOwner)
+            listAdapter.submitList(it)
+        }
     }
 
     private fun initView() = with(binding) {
@@ -50,11 +60,9 @@ class BookmarkFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private val editBookmarkLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val position = result.data?.getStringExtra(TodoContentActivity.EXTRA_TODO_POSITION)
-                val bookmarkModel = result.data?.getStringExtra(TodoContentActivity.EXTRA_TODO_MODEL)
-            }
-        }
+    fun addItem(item : BookmarkModel) {
+        viewModel.addBookmarkItem(item)
+    }
+
+
 }
