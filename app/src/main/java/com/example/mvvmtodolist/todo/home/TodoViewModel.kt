@@ -7,8 +7,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에서 처리 -> 이후 처리한 데이터를 뷰에다 알려줌
 
-    private val _list: MutableLiveData<List<TodoModel>> =
-        MutableLiveData() // _list : viewModel 내부적으로 control 하는 데이터
+    private val _list: MutableLiveData<List<TodoModel>> = MutableLiveData() // _list : viewModel 내부적으로 control 하는 데이터
     val list: LiveData<List<TodoModel>> get() = _list // 읽기만 가능한 상태
 
     // id 를 부여할 값
@@ -24,7 +23,8 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
                     TodoModel(
                         idGenerate.getAndIncrement(),
                         title = "title $i",
-                        description = "description $i"
+                        description = "description $i",
+                        bookmark = false
                     )
                 )
             }

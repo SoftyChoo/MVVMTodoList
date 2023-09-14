@@ -7,5 +7,6 @@ import kotlinx.parcelize.Parcelize
 data class TodoModel(
     val id: Long? = null,
     val title: String?,
-    val description: String?
+    val description: String?,
+    val bookmark: Boolean
 ) : Parcelable

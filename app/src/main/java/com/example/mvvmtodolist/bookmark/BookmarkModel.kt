@@ -8,4 +8,5 @@ data class BookmarkModel(
     val id: Int,
     val title: String,
     val description: String,
+    val bookmark: Boolean
 ) : Parcelable
