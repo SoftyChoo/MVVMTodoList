@@ -78,7 +78,7 @@ class TodoListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { // binding 해줌
-        val item = getItem(position) //DiffUtil getItem
+        val item = getItem(position) // ListAdapter의 메소드 getItem
         holder.bind(item)
     }
 
