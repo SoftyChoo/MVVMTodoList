@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mvvmtodolist.databinding.TodoItemBinding
 
 class TodoListAdapter(
-    private val onClickItem: (Int, TodoModel) -> Unit
+    private val onClickItem: (Int, TodoModel) -> Unit,
+    private val onBookmarkChecked: (Int, TodoModel) -> Unit
 ) : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(// ListAdapter : List를 관리하기 쉽게 DiffUtil을 비동기처리해주는 기능이 들어간 Adapter
     object : DiffUtil.ItemCallback<TodoModel>() {
         // DiffUtil : list 관리를 쉽게해주기위해 만든 알고리듬
@@ -19,7 +20,7 @@ class TodoListAdapter(
             oldItem: TodoModel,
             newItem: TodoModel
         ): Boolean {
-            return  oldItem.id == newItem.id // id를 통해 판단
+            return oldItem.id == newItem.id // id를 통해 판단
         }
 
         override fun areContentsTheSame(
@@ -73,7 +74,8 @@ class TodoListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {// item 생성
         return ViewHolder(
             TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onClickItem
+            onClickItem,
+            onBookmarkChecked
         )
     }
 
@@ -84,7 +86,8 @@ class TodoListAdapter(
 
     class ViewHolder(
         private val binding: TodoItemBinding,
-        private val onClickItem: (Int, TodoModel) -> Unit
+        private val onClickItem: (Int, TodoModel) -> Unit,
+        private val onBookmarkChecked: (Int, TodoModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: TodoModel) = with(binding) {
@@ -97,6 +100,14 @@ class TodoListAdapter(
                     item
                 )
             }
+            //SwitchClick
+            bookmark.setOnClickListener{
+                onBookmarkChecked(
+                    adapterPosition,
+                    item
+                )
+            }
+
         }
     }
 

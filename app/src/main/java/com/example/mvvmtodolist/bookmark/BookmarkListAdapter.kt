@@ -9,7 +9,7 @@ import com.example.mvvmtodolist.databinding.BookmarkItemBinding
 import com.example.mvvmtodolist.todo.home.TodoModel
 
 class BookmarkListAdapter(
-    private val onClickItem: (Int, BookmarkModel) -> Unit
+    private val onBookmarkChecked: (Int, BookmarkModel) -> Unit
 ) : ListAdapter<BookmarkModel, BookmarkListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<BookmarkModel>() {
         override fun areItemsTheSame(
@@ -17,6 +17,7 @@ class BookmarkListAdapter(
         ): Boolean {
             return oldItem.id == newItem.id
         }
+
         override fun areContentsTheSame(
             oldItem: BookmarkModel,
             newItem: BookmarkModel
@@ -28,10 +29,11 @@ class BookmarkListAdapter(
     fun addItems(items: List<BookmarkModel>) {
         submitList(items)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             BookmarkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onClickItem
+            onBookmarkChecked
         )
     }
 
@@ -42,14 +44,14 @@ class BookmarkListAdapter(
 
     class ViewHolder(
         private val binding: BookmarkItemBinding,
-        private val onClickItem: (Int, BookmarkModel) -> Unit
+        private val onBookmarkChecked: (Int, BookmarkModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: BookmarkModel) = with(binding) {
             title.text = item.title
             description.text = item.description
 
-            container.setOnClickListener {
-                onClickItem(
+            bookmark.setOnClickListener {
+                onBookmarkChecked(
                     adapterPosition,
                     item
                 )
