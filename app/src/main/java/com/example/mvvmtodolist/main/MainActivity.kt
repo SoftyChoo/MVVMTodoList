@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+        initModel()
+    }
+
+    private fun initModel() = with(viewModel){
+
     }
 
     private fun initView() = with(binding) {
