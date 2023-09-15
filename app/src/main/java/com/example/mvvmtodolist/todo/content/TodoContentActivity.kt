@@ -20,6 +20,7 @@ class TodoContentActivity : AppCompatActivity() {
         const val EXTRA_TODO_ENTRY_TYPE = "extra_todo_entry_type"
         const val EXTRA_TODO_POSITION = "extra_todo_position"
         const val EXTRA_TODO_MODEL = "extra_todo_model"
+        const val EXTRA_TODO_ISBOOKMARKED = "extra_todo_isbookmarked"
 
         fun newIntentForAdd(
             context: Context
@@ -49,14 +50,6 @@ class TodoContentActivity : AppCompatActivity() {
         TodoContentType.from(intent.getStringExtra(EXTRA_TODO_ENTRY_TYPE))
     }
 
-    fun test(){
-        when (entryType){
-            TodoContentType.ADD -> TODO()
-            TodoContentType.EDIT -> TODO()
-            TodoContentType.REMOVE -> TODO()
-            null -> TODO()
-        }
-    }
 
     private val todoModel by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -81,11 +74,7 @@ class TodoContentActivity : AppCompatActivity() {
         setContentView(binding.root)
         initView()
         initData()
-
-//        viewModel.list.observe(this){ //Activity LV
-//        }
     }
-
 
     private fun initView() = with(binding) {
 
@@ -105,7 +94,7 @@ class TodoContentActivity : AppCompatActivity() {
                 )
                 putExtra(
                     EXTRA_TODO_MODEL,
-                    TodoModel(
+                    todoModel?.copy(
                         title = todoTitle.text.toString(),
                         description = todoDescription.text.toString()
                     )
