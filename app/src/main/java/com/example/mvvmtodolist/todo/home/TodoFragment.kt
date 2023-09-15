@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.mvvmtodolist.databinding.TodoFragmentBinding
 import com.example.mvvmtodolist.main.MainActivity
+import com.example.mvvmtodolist.main.SharedViewModel
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
 import com.example.mvvmtodolist.todo.content.TodoContentType
+import java.util.concurrent.atomic.AtomicLong
 
 class TodoFragment : Fragment() {
 
@@ -28,9 +31,12 @@ class TodoFragment : Fragment() {
 //        ViewModelProvider(this).get(TodoViewModel::class.java)
 //    }
 
-    //현업코드 by viewModels -> 의존성 추가해주어야함.
-    private val viewModel: TodoViewModel by viewModels()
+    //현업코드 by viewModels -> 의존성 추가해주어야함.'
+    private val viewModel: TodoViewModel by viewModels {TodoViewModelFactory(AtomicLong(1L))}
 
+    private val sharedViewModel : SharedViewModel by activityViewModels()
+
+    //on -> sharedViewModel에 event를 보내고 전송
 
     private val editTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

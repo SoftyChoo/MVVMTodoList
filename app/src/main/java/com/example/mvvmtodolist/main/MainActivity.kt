@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mvvmtodolist.R
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private val viewPagerAdapter by lazy {
         MainViewPagerAdapter(this@MainActivity)
     }
+
+    private val viewModel : SharedViewModel by viewModels()
 
     private val addTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

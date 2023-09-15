@@ -22,7 +22,7 @@ class BookmarkFragment : Fragment() {
     private var _binding: BookmarkFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : BookmarkViewModel by viewModels()
+    private val viewModel : BookmarkViewModel by viewModels{BookmarkViewModelFactory()}
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->
