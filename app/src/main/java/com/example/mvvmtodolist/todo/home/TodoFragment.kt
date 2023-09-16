@@ -11,11 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.mvvmtodolist.databinding.TodoFragmentBinding
 import com.example.mvvmtodolist.main.BookmarkState
-import com.example.mvvmtodolist.main.MainActivity
 import com.example.mvvmtodolist.main.SharedViewModel
 import com.example.mvvmtodolist.main.TodoState
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
@@ -65,6 +63,7 @@ class TodoFragment : Fragment() {
                     TodoContentType.EDIT -> {
                         Log.d("test"," ${todoModel?.id}")
                         modifyTodoItem(todoModel , position)
+                        todoModel?.let { modifyToBookmarkTab(it) }
                     }
                     TodoContentType.REMOVE -> removeItemTodoItem(position)
                     else -> Unit // nothing
@@ -87,12 +86,11 @@ class TodoFragment : Fragment() {
                 if (item.isBookmark) {
                     addItemToBookmarkTab(item) // BookMarkTap에 Item 추가
                 } else {
-                    removeTodoBookmarkTab(item) /// BookMarkTap에서 Item 제거
+                    removeToBookmarkTab(item) /// BookMarkTap에서 Item 제거
                 }
                 modifyTodoItem(item, position) // BookMark가 check됐을 때 Item수정
             }
         )
-
     }
 
     override fun onCreateView(
@@ -163,12 +161,18 @@ class TodoFragment : Fragment() {
     }
 
     /** Bookmark Tab 에 아이템을 삭제합니다.*/
-    private fun removeTodoBookmarkTab(
+    private fun removeToBookmarkTab(
         item: TodoModel
     ) {
 //        sharedViewModel.removeBookmarkItem.value = item.toBookmarkModel()
         sharedViewModel.bookmarkState.value = BookmarkState.RemoveBookmark(item.toBookmarkModel())
 //        (activity as MainActivity).removeBookmarkItem(item)
+    }
+
+    private fun modifyToBookmarkTab(
+        item: TodoModel
+    ){
+        sharedViewModel.bookmarkState.value = BookmarkState.ModifyBookmark(item.toBookmarkModel())
     }
 
     override fun onDestroyView() {

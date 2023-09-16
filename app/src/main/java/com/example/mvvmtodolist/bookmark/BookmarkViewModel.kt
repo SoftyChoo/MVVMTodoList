@@ -39,6 +39,7 @@ class BookmarkViewModel : ViewModel() {
         }
         val currentList = list.value.orEmpty().toMutableList()
         currentList[findPosition] = bookmarkModel
+        _list.value = currentList
     }
 
     fun findIndex(bookmarkModel: BookmarkModel): Int? {

@@ -1,6 +1,7 @@
 package com.example.mvvmtodolist.todo.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -66,17 +67,20 @@ class TodoListAdapter(
                     item
                 )
             }
-            // 북마크 클릭
-            bookmark.setOnCheckedChangeListener { _, isChecked ->
-                // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
-                onBookmarkChecked(
-                    adapterPosition,
-                    item.copy(
-                        isBookmark = isChecked
-                    )
-                )
-            }
 
+
+            // 북마크 클릭
+            bookmark.setOnCheckedChangeListener { view, isChecked ->
+                if(view.isPressed){
+                    onBookmarkChecked(
+                        adapterPosition,
+                        item.copy(
+                            isBookmark = isChecked // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
+                        )
+                    )
+                }
+
+            }
         }
     }
 

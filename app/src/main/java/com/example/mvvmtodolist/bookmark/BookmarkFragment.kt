@@ -44,7 +44,6 @@ class BookmarkFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = BookmarkFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -64,12 +63,16 @@ class BookmarkFragment : Fragment() {
         sharedViewModel.bookmarkState.observe(viewLifecycleOwner, Observer { state ->
             when(state){
                 is BookmarkState.AddBookmark -> addItem(state.bookmarkModel)
-                is BookmarkState.ModifyBookmark -> Unit
+                is BookmarkState.ModifyBookmark -> modifyItem(state.bookmarkModel)
                 is BookmarkState.RemoveBookmark -> removeItem(state.bookmarkModel)
             }
         })
 //        sharedViewModel.removeBookmarkItem.observe(viewLifecycleOwner, Observer { newData ->  removeItem(item = newData)})
 //        sharedViewModel.addBookmarkItem.observe(viewLifecycleOwner, Observer { newData -> addItem(item = newData)})
+    }
+
+    private fun modifyItem(bookmarkModel: BookmarkModel) {
+        viewModel.modifyBookmarkItem(bookmarkModel)
     }
 
     private fun initView() = with(binding) {
