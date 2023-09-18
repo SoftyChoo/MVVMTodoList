@@ -120,6 +120,10 @@ class TodoContentActivity : AppCompatActivity() {
                             EXTRA_TODO_POSITION,
                             position
                         )
+                        putExtra(
+                            EXTRA_TODO_MODEL,
+                            todoModel
+                        )
                     }
                     setResult(Activity.RESULT_OK, intent)
                     finish()

@@ -61,11 +61,16 @@ class TodoFragment : Fragment() {
                 // entry type 에 따라 기능 분리
                 when (TodoContentType.from(entryType)) {
                     TodoContentType.EDIT -> {
-                        Log.d("test"," ${todoModel?.id}")
-                        modifyTodoItem(todoModel , position)
+                        Log.d("test", " ${todoModel?.id}")
+                        modifyTodoItem(todoModel, position)
                         todoModel?.let { modifyToBookmarkTab(it) }
                     }
-                    TodoContentType.REMOVE -> removeItemTodoItem(position)
+
+                    TodoContentType.REMOVE -> {
+                        removeItemTodoItem(position)
+                        todoModel?.let { removeToBookmarkTab(it) }
+                    }
+
                     else -> Unit // nothing
                 }
             }
@@ -99,8 +104,8 @@ class TodoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 //        sharedViewModel.modifyTodoItem.observe(viewLifecycleOwner, Observer { newData -> modifyTodoItem(todoModel = newData) })
-        sharedViewModel.TodoState.observe(viewLifecycleOwner, Observer { state->
-            when(state){
+        sharedViewModel.TodoState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
                 is TodoState.ModifyTodo -> modifyTodoItem(state.todoModel)
             }
         })
@@ -152,7 +157,8 @@ class TodoFragment : Fragment() {
     ) {
         //sharedViewModel.addBookmarkItem.value = item.toBookmarkModel()
         //->
-        sharedViewModel.bookmarkState.value = BookmarkState.AddBookmark(item.toBookmarkModel())
+        sharedViewModel.bookmarkState.value =
+            BookmarkState.AddBookmark(item.toBookmarkModel()) // 함수
 
 //        (activity as MainActivity).addBookmarkItem(item) //다음의 통해 진행하면 메모리 누수, 생명주기..? 등 다양한 문제가 발생할 수 있다.
         // -> 바로 MainActivity 뷰모델에 접근하는게 좋다.
@@ -171,7 +177,7 @@ class TodoFragment : Fragment() {
 
     private fun modifyToBookmarkTab(
         item: TodoModel
-    ){
+    ) {
         sharedViewModel.bookmarkState.value = BookmarkState.ModifyBookmark(item.toBookmarkModel())
     }
 

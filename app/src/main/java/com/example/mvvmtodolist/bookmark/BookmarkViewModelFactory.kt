@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import java.lang.IllegalArgumentException
 
 class BookmarkViewModelFactory : ViewModelProvider.Factory {
-
     override fun <T: ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(BookmarkViewModel::class.java)){
             return BookmarkViewModel() as T
