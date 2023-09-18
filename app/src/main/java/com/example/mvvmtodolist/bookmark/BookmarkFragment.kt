@@ -94,10 +94,10 @@ class BookmarkFragment : Fragment() {
         viewModel.removeBookmarkItem(item,position)
     }
 
-
     private fun modifyItemAtTodoTab(item: BookmarkModel) {
-        sharedViewModel.TodoState.value = TodoState.ModifyTodo(item.toTodoModel())
+        sharedViewModel.updateTodoState(item)
 
+//        sharedViewModel.todoState.value = TodoState.ModifyTodo(item.toTodoModel())
 //        sharedViewModel.modifyTodoItem.value = item.toTodoModel()
 //        (activity as MainActivity).modifyTodoItem(item)
     }
