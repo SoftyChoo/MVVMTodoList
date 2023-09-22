@@ -6,6 +6,8 @@
 <br/>
 <br/>
 
+MVVM 공부를 위한 TodoList Application
+
 
 
 
