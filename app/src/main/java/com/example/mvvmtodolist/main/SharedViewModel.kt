@@ -38,9 +38,3 @@ sealed interface TodoState {
     data class ModifyTodo(val todoModel: TodoModel) : TodoState
 }
 
-//sealed interface BookmarkState(val bookmarkModel: BookmarkModel){ // refactoring
-//    data class AddBookmark() : BookmarkState
-//    data class RemoveBookmark(val bookmarkModel: BookmarkModel) : BookmarkState
-//    data class ModifyBookmark(val bookmarkModel: BookmarkModel) : BookmarkState
-//}
-
