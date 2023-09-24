@@ -7,8 +7,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에서 처리 -> 이후 처리한 데이터를 뷰에다 알려줌
 
-    private val _list: MutableLiveData<List<TodoModel>> =
-        MutableLiveData() // _list : viewModel 내부적으로 control 하는 데이터
+    private val _list: MutableLiveData<List<TodoModel>> = MutableLiveData() // _list : viewModel 내부적으로 control 하는 데이터
     val list: LiveData<List<TodoModel>> get() = _list // 읽기만 가능한 상태
 
     // id 를 부여할 값
@@ -24,7 +23,8 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
                     TodoModel(
                         idGenerate.getAndIncrement(),
                         title = "title $i",
-                        description = "description $i"
+                        description = "description $i",
+                        isBookmark = false
                     )
                 )
             }
@@ -47,8 +47,7 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
         }
     }
 
-
-    fun removeItem(position: Int?) {
+    fun removeTodoItem(position: Int?) {
         if (position == null || position < 0) {
             return
         }
@@ -57,13 +56,13 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
         _list.value = currentList
     }
 
-    fun modifyItem(
+    fun modifyTodoItem(
         position: Int?,
         todoModel: TodoModel?
     ) {
         fun findIndex(todoModel: TodoModel): Int? {
             val currentList = list.value?.toMutableList()
-            val findTodoById = currentList?.find { // 수정하고자 하는 todoModel의 id와 currentList의 id를 비교
+            val findTodoById = currentList?.find { // 수정하고자 하는 todoModel의 id와 currentList의 id를 비교해 같은 id 를 찾음
                 it.id == todoModel.id
             }
             return currentList?.indexOf(findTodoById)//indexOf : 찾고자 하는 Array의 index를 반환
@@ -73,7 +72,7 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
             return
         }
 
-        val findPosition = position ?: findIndex(todoModel) //position이 안들어왔을 경우 id 값으로
+        val findPosition = position ?: findIndex(todoModel) //position이 안들어왔을 경우 id 값으로 진행
         if (findPosition == null || findPosition < 0) {
             return
         }
@@ -82,6 +81,4 @@ class TodoViewModel : ViewModel() { //비즈니스 로직을 전부 viewModel에
         currentList[findPosition] = todoModel
         _list.value = currentList
     }
-
-
 }
