@@ -103,13 +103,11 @@ class TodoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        sharedViewModel.modifyTodoItem.observe(viewLifecycleOwner, Observer { newData -> modifyTodoItem(todoModel = newData) })
-        sharedViewModel.TodoState.observe(viewLifecycleOwner, Observer { state ->
+        sharedViewModel.todoState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is TodoState.ModifyTodo -> modifyTodoItem(state.todoModel)
             }
         })
-
         _binding = TodoFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -155,12 +153,11 @@ class TodoFragment : Fragment() {
     private fun addItemToBookmarkTab(
         item: TodoModel
     ) {
-        //sharedViewModel.addBookmarkItem.value = item.toBookmarkModel()
-        //->
-        sharedViewModel.bookmarkState.value =
-            BookmarkState.AddBookmark(item.toBookmarkModel()) // 함수
+        sharedViewModel.updateBookmarkState(item,TodoContentType.ADD.name)
 
-//        (activity as MainActivity).addBookmarkItem(item) //다음의 통해 진행하면 메모리 누수, 생명주기..? 등 다양한 문제가 발생할 수 있다.
+        //sharedViewModel.bookmarkState.value = BookmarkState.AddBookmark(item.toBookmarkModel()) // 함수
+        //sharedViewModel.addBookmarkItem.value = item.toBookmarkModel()
+        //(activity as MainActivity).addBookmarkItem(item) //다음의 통해 진행하면 메모리 누수, 생명주기..? 등 다양한 문제가 발생할 수 있다.
         // -> 바로 MainActivity 뷰모델에 접근하는게 좋다.
         //MainViewModel.addBookmarkItem이런식
         // 형 변환을 통해 현재 호스팅이 MainActivity라는 것을 확신
@@ -170,15 +167,17 @@ class TodoFragment : Fragment() {
     private fun removeToBookmarkTab(
         item: TodoModel
     ) {
+        sharedViewModel.updateBookmarkState(item,TodoContentType.REMOVE.name)
 //        sharedViewModel.removeBookmarkItem.value = item.toBookmarkModel()
-        sharedViewModel.bookmarkState.value = BookmarkState.RemoveBookmark(item.toBookmarkModel())
+//        sharedViewModel.bookmarkState.value = BookmarkState.RemoveBookmark(item.toBookmarkModel())
 //        (activity as MainActivity).removeBookmarkItem(item)
     }
 
     private fun modifyToBookmarkTab(
         item: TodoModel
     ) {
-        sharedViewModel.bookmarkState.value = BookmarkState.ModifyBookmark(item.toBookmarkModel())
+        sharedViewModel.updateBookmarkState(item,TodoContentType.EDIT.name)
+//        sharedViewModel.bookmarkState.value = BookmarkState.ModifyBookmark(item.toBookmarkModel())
     }
 
     override fun onDestroyView() {
