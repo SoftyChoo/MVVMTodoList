@@ -34,12 +34,10 @@ class TodoFragment : Fragment() {
 //        ViewModelProvider(this).get(TodoViewModel::class.java)
 //    }
 
-    //현업코드 by viewModels -> 의존성 추가해주어야함.'
+    // by viewModels -> 의존성 추가 해야함
     private val viewModel: TodoViewModel by viewModels { TodoViewModelFactory(AtomicLong(1L)) }
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
-    //on -> sharedViewModel에 event를 보내고 전송
 
     private val editTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -103,11 +101,6 @@ class TodoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        sharedViewModel.todoState.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is TodoState.ModifyTodo -> modifyTodoItem(state.todoModel)
-            }
-        })
         _binding = TodoFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -115,14 +108,19 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        initModel() // viewModel
+        initModel()
     }
 
-    private fun initModel() = with(viewModel) { // viewModel
+    private fun initModel() = with(viewModel) {
         // viewModel 상 읽기용 list
-        list.observe(viewLifecycleOwner) { // Fragment LV : observe(viewLifecycleOwner)
+        list.observe(viewLifecycleOwner) {
             listAdapter.submitList(it)
         }
+        sharedViewModel.todoState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is TodoState.ModifyTodo -> modifyTodoItem(state.todoModel)
+            }
+        })
     }
 
     private fun initView() = with(binding) {
@@ -157,7 +155,8 @@ class TodoFragment : Fragment() {
 
         //sharedViewModel.bookmarkState.value = BookmarkState.AddBookmark(item.toBookmarkModel()) // 함수
         //sharedViewModel.addBookmarkItem.value = item.toBookmarkModel()
-        //(activity as MainActivity).addBookmarkItem(item) //다음의 통해 진행하면 메모리 누수, 생명주기..? 등 다양한 문제가 발생할 수 있다.
+        //(activity as MainActivity).addBookmarkItem(item)
+        // 다음의 통해 진행하면 메모리 누수, 생명주기..? 등 다양한 문제가 발생할 수 있다.
         // -> 바로 MainActivity 뷰모델에 접근하는게 좋다.
         //MainViewModel.addBookmarkItem이런식
         // 형 변환을 통해 현재 호스팅이 MainActivity라는 것을 확신
@@ -168,16 +167,12 @@ class TodoFragment : Fragment() {
         item: TodoModel
     ) {
         sharedViewModel.updateBookmarkState(item,TodoContentType.REMOVE.name)
-//        sharedViewModel.removeBookmarkItem.value = item.toBookmarkModel()
-//        sharedViewModel.bookmarkState.value = BookmarkState.RemoveBookmark(item.toBookmarkModel())
-//        (activity as MainActivity).removeBookmarkItem(item)
     }
 
     private fun modifyToBookmarkTab(
         item: TodoModel
     ) {
         sharedViewModel.updateBookmarkState(item,TodoContentType.EDIT.name)
-//        sharedViewModel.bookmarkState.value = BookmarkState.ModifyBookmark(item.toBookmarkModel())
     }
 
     override fun onDestroyView() {

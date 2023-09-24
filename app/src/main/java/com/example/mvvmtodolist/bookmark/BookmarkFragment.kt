@@ -56,7 +56,7 @@ class BookmarkFragment : Fragment() {
 
     private fun initModel() = with(viewModel) {
         // viewModel 상 읽기용 list
-        list.observe(viewLifecycleOwner) { // Fragment LV : observe(viewLifecycleOwner)
+        list.observe(viewLifecycleOwner) {
             listAdapter.submitList(it)
         }
         //데이터를 관찰해 데이터 수신
@@ -67,8 +67,6 @@ class BookmarkFragment : Fragment() {
                 is BookmarkState.RemoveBookmark -> removeItem(state.bookmarkModel)
             }
         })
-//        sharedViewModel.removeBookmarkItem.observe(viewLifecycleOwner, Observer { newData ->  removeItem(item = newData)})
-//        sharedViewModel.addBookmarkItem.observe(viewLifecycleOwner, Observer { newData -> addItem(item = newData)})
     }
 
     private fun modifyItem(bookmarkModel: BookmarkModel) {
@@ -96,10 +94,6 @@ class BookmarkFragment : Fragment() {
 
     private fun modifyItemAtTodoTab(item: BookmarkModel) {
         sharedViewModel.updateTodoState(item)
-
-//        sharedViewModel.todoState.value = TodoState.ModifyTodo(item.toTodoModel())
-//        sharedViewModel.modifyTodoItem.value = item.toTodoModel()
-//        (activity as MainActivity).modifyTodoItem(item)
     }
 
 

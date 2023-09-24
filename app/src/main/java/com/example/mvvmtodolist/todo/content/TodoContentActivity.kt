@@ -16,7 +16,6 @@ import com.example.mvvmtodolist.todo.home.TodoModel
 class TodoContentActivity : AppCompatActivity() {
 
     companion object {
-
         const val EXTRA_TODO_ENTRY_TYPE = "extra_todo_entry_type"
         const val EXTRA_TODO_POSITION = "extra_todo_position"
         const val EXTRA_TODO_MODEL = "extra_todo_model"
@@ -38,13 +37,7 @@ class TodoContentActivity : AppCompatActivity() {
             putExtra(EXTRA_TODO_MODEL, todoModel)
         }
     }
-
     private lateinit var binding: TodoAddActivityBinding
-
-    //AAC viewModel을 선언할 때 다른얘들과는 다르게 provider를 통해 선언해주어야한다.
-//    private val viewModel : TodoViewModel by lazy {
-//        ViewModelProvider(this).get(TodoViewModel::class.java)
-//    }
 
     private val entryType by lazy {
         TodoContentType.from(intent.getStringExtra(EXTRA_TODO_ENTRY_TYPE))
