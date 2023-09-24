@@ -1,6 +1,7 @@
 package com.example.mvvmtodolist.todo.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -66,19 +67,20 @@ class TodoListAdapter(
                     item
                 )
             }
+
+
             // 북마크 클릭
-            bookmark.setOnCheckedChangeListener { _, isChecked ->
-                // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
-                if (item.isBookmark != isChecked) { // 둘이 상태가 다를 경우 상태를 isChecked로 바꾼 item을 copy해와 전송
+            bookmark.setOnCheckedChangeListener { view, isChecked ->
+                if(view.isPressed){
                     onBookmarkChecked(
                         adapterPosition,
                         item.copy(
-                            isBookmark = isChecked
+                            isBookmark = isChecked // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
                         )
                     )
                 }
-            }
 
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mvvmtodolist.R
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         MainViewPagerAdapter(this@MainActivity)
     }
 
+    private val viewModel : SharedViewModel by viewModels()
+
     private val addTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -38,9 +41,8 @@ class MainActivity : AppCompatActivity() {
                         TodoContentActivity.EXTRA_TODO_MODEL
                     )
                 }
-
                 val todoFragment = viewPagerAdapter.getFragment(0) as? TodoFragment
-                todoFragment?.setDodoContent(todoModel)
+                todoFragment?.setDodoContent(todoModel?.copy(isBookmark = false))
             }
         }
 
@@ -50,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+        initModel()
+    }
+
+    private fun initModel() = with(viewModel){
+
     }
 
     private fun initView() = with(binding) {
@@ -81,22 +88,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun addBookmarkItem(item: TodoModel) {
-        val fragment = viewPagerAdapter.getFragment(1) as? BookmarkFragment //BookmarkFragment로 캐스팅을 해 다른 값이 넘어오면 널 반환
-        fragment?.addItem(item.toBookmarkModel()) // TodoModel을 BookmarkModel로 변환하여 추가
-    }
-
-    fun removeBookmarkItem(item: TodoModel) {
-        val fragment = viewPagerAdapter.getFragment(1) as? BookmarkFragment
-        fragment?.removeItem(
-            item = item.toBookmarkModel()
-        )
-    }
-
-    fun modifyTodoItem(item: BookmarkModel) {
-        val fragment = viewPagerAdapter.getFragment(0) as? TodoFragment
-        fragment?.modifyTodoItem(item.toTodoModel())
-    }
+//    fun addBookmarkItem(item: TodoModel) {
+//        val fragment = viewPagerAdapter.getFragment(1) as? BookmarkFragment //BookmarkFragment로 캐스팅을 해 다른 값이 넘어오면 널 반환
+//        fragment?.addItem(item.toBookmarkModel()) // TodoModel을 BookmarkModel로 변환하여 추가
+//    }
+//
+//    fun removeBookmarkItem(item: TodoModel) {
+//        val fragment = viewPagerAdapter.getFragment(1) as? BookmarkFragment
+//        fragment?.removeItem(
+//            item = item.toBookmarkModel()
+//        )
+//    }
+//
+//    fun modifyTodoItem(item: BookmarkModel) {
+//        val fragment = viewPagerAdapter.getFragment(0) as? TodoFragment
+//        fragment?.modifyTodoItem(item.toTodoModel())
+//    }
 
 
 

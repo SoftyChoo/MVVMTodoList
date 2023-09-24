@@ -3,16 +3,22 @@ package com.example.mvvmtodolist.todo.home
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.mvvmtodolist.databinding.TodoFragmentBinding
-import com.example.mvvmtodolist.main.MainActivity
+import com.example.mvvmtodolist.main.BookmarkState
+import com.example.mvvmtodolist.main.SharedViewModel
+import com.example.mvvmtodolist.main.TodoState
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
 import com.example.mvvmtodolist.todo.content.TodoContentType
+import java.util.concurrent.atomic.AtomicLong
 
 class TodoFragment : Fragment() {
 
@@ -28,9 +34,12 @@ class TodoFragment : Fragment() {
 //        ViewModelProvider(this).get(TodoViewModel::class.java)
 //    }
 
-    //현업코드 by viewModels -> 의존성 추가해주어야함.
-    private val viewModel: TodoViewModel by viewModels()
+    //현업코드 by viewModels -> 의존성 추가해주어야함.'
+    private val viewModel: TodoViewModel by viewModels { TodoViewModelFactory(AtomicLong(1L)) }
 
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    //on -> sharedViewModel에 event를 보내고 전송
 
     private val editTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -51,8 +60,17 @@ class TodoFragment : Fragment() {
 
                 // entry type 에 따라 기능 분리
                 when (TodoContentType.from(entryType)) {
-                    TodoContentType.EDIT -> modifyTodoItem(todoModel, position)
-                    TodoContentType.REMOVE -> removeItemTodoItem(position)
+                    TodoContentType.EDIT -> {
+                        Log.d("test", " ${todoModel?.id}")
+                        modifyTodoItem(todoModel, position)
+                        todoModel?.let { modifyToBookmarkTab(it) }
+                    }
+
+                    TodoContentType.REMOVE -> {
+                        removeItemTodoItem(position)
+                        todoModel?.let { removeToBookmarkTab(it) }
+                    }
+
                     else -> Unit // nothing
                 }
             }
@@ -70,17 +88,14 @@ class TodoFragment : Fragment() {
                 )
             },
             onBookmarkChecked = { position, item ->
-
                 if (item.isBookmark) {
                     addItemToBookmarkTab(item) // BookMarkTap에 Item 추가
                 } else {
-                    removeTodoBookmarkTab(item) /// BookMarkTap에서 Item 제거
+                    removeToBookmarkTab(item) /// BookMarkTap에서 Item 제거
                 }
                 modifyTodoItem(item, position) // BookMark가 check됐을 때 Item수정
-
             }
         )
-
     }
 
     override fun onCreateView(
@@ -88,6 +103,13 @@ class TodoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+//        sharedViewModel.modifyTodoItem.observe(viewLifecycleOwner, Observer { newData -> modifyTodoItem(todoModel = newData) })
+        sharedViewModel.TodoState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is TodoState.ModifyTodo -> modifyTodoItem(state.todoModel)
+            }
+        })
+
         _binding = TodoFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -133,16 +155,30 @@ class TodoFragment : Fragment() {
     private fun addItemToBookmarkTab(
         item: TodoModel
     ) {
-        (activity as MainActivity).addBookmarkItem(item) //다음의 통해 진행하면 메모리 누수, 생명주기..? 등 다양한 문제가 발생할 수 있다.
+        //sharedViewModel.addBookmarkItem.value = item.toBookmarkModel()
+        //->
+        sharedViewModel.bookmarkState.value =
+            BookmarkState.AddBookmark(item.toBookmarkModel()) // 함수
+
+//        (activity as MainActivity).addBookmarkItem(item) //다음의 통해 진행하면 메모리 누수, 생명주기..? 등 다양한 문제가 발생할 수 있다.
         // -> 바로 MainActivity 뷰모델에 접근하는게 좋다.
         //MainViewModel.addBookmarkItem이런식
         // 형 변환을 통해 현재 호스팅이 MainActivity라는 것을 확신
     }
 
-    private fun removeTodoBookmarkTab(
+    /** Bookmark Tab 에 아이템을 삭제합니다.*/
+    private fun removeToBookmarkTab(
         item: TodoModel
     ) {
-        (activity as MainActivity).removeBookmarkItem(item)
+//        sharedViewModel.removeBookmarkItem.value = item.toBookmarkModel()
+        sharedViewModel.bookmarkState.value = BookmarkState.RemoveBookmark(item.toBookmarkModel())
+//        (activity as MainActivity).removeBookmarkItem(item)
+    }
+
+    private fun modifyToBookmarkTab(
+        item: TodoModel
+    ) {
+        sharedViewModel.bookmarkState.value = BookmarkState.ModifyBookmark(item.toBookmarkModel())
     }
 
     override fun onDestroyView() {
