@@ -8,24 +8,15 @@ import androidx.lifecycle.ViewModelProvider
 import java.util.concurrent.atomic.AtomicLong
 
 class TodoViewModel(
-    private val idGenerate: AtomicLong
+    repository: TodoRepository
 ) : ViewModel() {
 
     private val _list: MutableLiveData<List<TodoModel>> = MutableLiveData()
     val list: LiveData<List<TodoModel>> get() = _list
+    private val idGenerate = repository.getIdGenerate()
 
     init {
-        _list.value = arrayListOf<TodoModel>().apply {
-            for (i in 0 until 3) {
-                add(
-                    TodoModel(
-                        idGenerate.getAndIncrement(),
-                        "title $i",
-                        "description $i"
-                    )
-                )
-            }
-        }
+        _list.value = repository.getTestData()
     }
 
     /**
@@ -91,12 +82,11 @@ class TodoViewModel(
 
 class TodoViewModelFactory : ViewModelProvider.Factory {
 
-    // id 를 부여할 값
-    private val idGenerate = AtomicLong(1L)
+    private val repository = TodoRepositoryImpl()
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
-            return TodoViewModel(idGenerate) as T
+            return TodoViewModel(repository) as T
         } else {
             throw IllegalArgumentException("Not found ViewModel class.")
         }
