@@ -11,17 +11,14 @@ import com.example.mvvmtodolist.databinding.TodoItemBinding
 class TodoListAdapter(
     private val onClickItem: (Int, TodoModel) -> Unit,
     private val onBookmarkChecked: (Int, TodoModel) -> Unit
-) : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(// ListAdapter : List를 관리하기 쉽게 DiffUtil을 비동기처리해주는 기능이 들어간 Adapter
-    object : DiffUtil.ItemCallback<TodoModel>() {
-        // DiffUtil : list 관리를 쉽게해주기위해 만든 알고리듬
-        // DiffUtil을 통해 데이터가 변경되었는지 찾음
-        // + Adapter의 List와 새로 변경된 List를 비교해서 변경이 있으면 RecyclerView를 새로고침
+) : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(
 
-        override fun areItemsTheSame( //areItemsTheSame item속성이 같은지 다른지 여부 판단
+    object : DiffUtil.ItemCallback<TodoModel>() {
+        override fun areItemsTheSame(
             oldItem: TodoModel,
             newItem: TodoModel
         ): Boolean {
-            return oldItem.id == newItem.id // id를 통해 판단
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
@@ -30,13 +27,10 @@ class TodoListAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-        // ->> ** areItemsTheSame, areContentsTheSame DiffUtil을 판단해 데이터를 갱신해주는 역할을 하는 함수 **
     }
 ) {
-    //ListAdapter는 기존에 사용하고 있던 리스트를 재활용하지 못한다.
-    //그 이유는 기존에 들어왔던 ArrayList와 새로 들어온 ArrayList를 다르게 인식하기 때문에
-    //submit(list)를 할 경우에 새로운 ArrayList의 인스턴스를 생성해서 넣어줘야한다.
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {// item 생성
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onClickItem,
@@ -44,8 +38,8 @@ class TodoListAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) { // binding 해줌
-        val item = getItem(position) // ListAdapter의 메소드 getItem
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
         holder.bind(item)
     }
 
@@ -60,7 +54,7 @@ class TodoListAdapter(
             description.text = item.description
             bookmark.isChecked = item.isBookmark
 
-            // itemClick
+            // 아이템 클릭
             container.setOnClickListener {
                 onClickItem(
                     adapterPosition,
@@ -68,18 +62,16 @@ class TodoListAdapter(
                 )
             }
 
-
             // 북마크 클릭
-            bookmark.setOnCheckedChangeListener { view, isChecked ->
-                if(view.isPressed){
+            bookmark.setOnClickListener {
+                if (item.isBookmark != bookmark.isChecked) {
                     onBookmarkChecked(
                         adapterPosition,
                         item.copy(
-                            isBookmark = isChecked // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
+                            isBookmark = bookmark.isChecked
                         )
                     )
                 }
-
             }
         }
     }

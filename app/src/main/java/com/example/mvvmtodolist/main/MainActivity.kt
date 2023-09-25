@@ -18,6 +18,7 @@ import com.example.mvvmtodolist.todo.home.TodoModel
 import com.example.mvvmtodolist.todo.home.toBookmarkModel
 import com.google.android.material.tabs.TabLayoutMediator
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: MainActivityBinding
@@ -26,8 +27,7 @@ class MainActivity : AppCompatActivity() {
         MainViewPagerAdapter(this@MainActivity)
     }
 
-    private val viewModel : SharedViewModel by viewModels()
-
+    // 데이터 추가
     private val addTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -41,8 +41,9 @@ class MainActivity : AppCompatActivity() {
                         TodoContentActivity.EXTRA_TODO_MODEL
                     )
                 }
+
                 val todoFragment = viewPagerAdapter.getFragment(0) as? TodoFragment
-                todoFragment?.setDodoContent(todoModel?.copy(isBookmark = false))
+                todoFragment?.setDodoContent(todoModel)
             }
         }
 
@@ -52,11 +53,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
-        initModel()
-    }
-
-    private fun initModel() = with(viewModel){
-
     }
 
     private fun initView() = with(binding) {
@@ -74,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        viewPager.offscreenPageLimit = viewPagerAdapter.itemCount
 
         // TabLayout x ViewPager2
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->

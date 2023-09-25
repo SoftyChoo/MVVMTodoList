@@ -11,9 +11,11 @@ import com.example.mvvmtodolist.todo.home.TodoModel
 class BookmarkListAdapter(
     private val onBookmarkChecked: (Int, BookmarkModel) -> Unit
 ) : ListAdapter<BookmarkModel, BookmarkListAdapter.ViewHolder>(
+
     object : DiffUtil.ItemCallback<BookmarkModel>() {
         override fun areItemsTheSame(
-            oldItem: BookmarkModel, newItem: BookmarkModel
+            oldItem: BookmarkModel,
+            newItem: BookmarkModel
         ): Boolean {
             return oldItem.id == newItem.id
         }
@@ -26,9 +28,6 @@ class BookmarkListAdapter(
         }
     }
 ) {
-    fun addItems(items: List<BookmarkModel>) {
-        submitList(items)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -38,7 +37,7 @@ class BookmarkListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position) // ListAdapter의 메소드 getItem
+        val item = getItem(position)
         holder.bind(item)
     }
 
@@ -46,17 +45,20 @@ class BookmarkListAdapter(
         private val binding: BookmarkItemBinding,
         private val onBookmarkChecked: (Int, BookmarkModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: BookmarkModel) = with(binding) {
             title.text = item.title
             description.text = item.description
             bookmark.isChecked = item.isBookmark
 
-            bookmark.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (item.isBookmark != isChecked) {
+            // 북마크 클릭
+            bookmark.setOnClickListener {
+                // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
+                if (item.isBookmark != bookmark.isChecked) {
                     onBookmarkChecked(
                         adapterPosition,
                         item.copy(
-                            isBookmark = isChecked
+                            isBookmark = bookmark.isChecked
                         )
                     )
                 }

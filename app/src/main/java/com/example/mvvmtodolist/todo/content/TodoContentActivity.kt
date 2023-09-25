@@ -13,13 +13,14 @@ import com.example.mvvmtodolist.databinding.TodoAddActivityBinding
 import com.example.mvvmtodolist.todo.home.TodoModel
 
 
+
 class TodoContentActivity : AppCompatActivity() {
 
     companion object {
+
         const val EXTRA_TODO_ENTRY_TYPE = "extra_todo_entry_type"
         const val EXTRA_TODO_POSITION = "extra_todo_position"
         const val EXTRA_TODO_MODEL = "extra_todo_model"
-        const val EXTRA_TODO_ISBOOKMARKED = "extra_todo_isbookmarked"
 
         fun newIntentForAdd(
             context: Context
@@ -37,12 +38,12 @@ class TodoContentActivity : AppCompatActivity() {
             putExtra(EXTRA_TODO_MODEL, todoModel)
         }
     }
+
     private lateinit var binding: TodoAddActivityBinding
 
     private val entryType by lazy {
         TodoContentType.from(intent.getStringExtra(EXTRA_TODO_ENTRY_TYPE))
     }
-
 
     private val todoModel by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -85,17 +86,22 @@ class TodoContentActivity : AppCompatActivity() {
                     EXTRA_TODO_POSITION,
                     position
                 )
+
+                val title = todoTitle.text.toString()
+                val description = todoDescription.text.toString()
                 putExtra(
                     EXTRA_TODO_MODEL,
                     todoModel?.copy(
-                        title = todoTitle.text.toString(),
-                        description = todoDescription.text.toString()
+                        title = title,
+                        description = description
+                    ) ?: TodoModel(
+                        title = title,
+                        description = description
                     )
                 )
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
-
         }
 
         delete.setOnClickListener {
@@ -112,10 +118,6 @@ class TodoContentActivity : AppCompatActivity() {
                         putExtra(
                             EXTRA_TODO_POSITION,
                             position
-                        )
-                        putExtra(
-                            EXTRA_TODO_MODEL,
-                            todoModel
                         )
                     }
                     setResult(Activity.RESULT_OK, intent)

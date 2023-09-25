@@ -13,10 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.mvvmtodolist.databinding.BookmarkFragmentBinding
-import com.example.mvvmtodolist.main.BookmarkState
 import com.example.mvvmtodolist.main.MainActivity
-import com.example.mvvmtodolist.main.SharedViewModel
-import com.example.mvvmtodolist.main.TodoState
+import com.example.mvvmtodolist.main.MainSharedEventForBookmark
+import com.example.mvvmtodolist.main.MainSharedViewModel
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
 
 class BookmarkFragment : Fragment() {
@@ -28,14 +27,13 @@ class BookmarkFragment : Fragment() {
     private var _binding: BookmarkFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : BookmarkViewModel by viewModels{BookmarkViewModelFactory()}
-
-    private val sharedViewModel : SharedViewModel by activityViewModels()
+    private val sharedViewModel: MainSharedViewModel by activityViewModels()
+    private val viewModel: BookmarkViewModel by viewModels()
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->
-            modifyItemAtTodoTab(item)
-            removeItem(item,position)//변화시 item 삭제
+            viewModel.removeBookmarkItem(position)
+            sharedViewModel.updateTodoItem(item)
         }
     }
 
@@ -51,50 +49,35 @@ class BookmarkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        initModel()
-    }
-
-    private fun initModel() = with(viewModel) {
-        // viewModel 상 읽기용 list
-        list.observe(viewLifecycleOwner) {
-            listAdapter.submitList(it)
-        }
-        //데이터를 관찰해 데이터 수신
-        sharedViewModel.bookmarkState.observe(viewLifecycleOwner, Observer { state ->
-            when(state){
-                is BookmarkState.AddBookmark -> addItem(state.bookmarkModel)
-                is BookmarkState.ModifyBookmark -> modifyItem(state.bookmarkModel)
-                is BookmarkState.RemoveBookmark -> removeItem(state.bookmarkModel)
-            }
-        })
-    }
-
-    private fun modifyItem(bookmarkModel: BookmarkModel) {
-        viewModel.modifyBookmarkItem(bookmarkModel)
+        initViewModel()
     }
 
     private fun initView() = with(binding) {
         bookmarkList.adapter = listAdapter
     }
 
+    private fun initViewModel() {
+        with(viewModel) {
+            list.observe(viewLifecycleOwner) {
+                listAdapter.submitList(it)
+            }
+        }
+
+        with(sharedViewModel) {
+            bookmarkEvent.observe(viewLifecycleOwner) { event ->
+                when (event) {
+                    is MainSharedEventForBookmark.UpdateBookmarkItems -> {
+                        viewModel.updateBookmarkItems(event.items)
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
+    }
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
     }
-
-    private fun addItem(
-        item : BookmarkModel
-    ) {
-        viewModel.addBookmarkItem(item)
-    }
-
-    private fun removeItem(item : BookmarkModel ,position: Int? = null) {
-        viewModel.removeBookmarkItem(item,position)
-    }
-
-    private fun modifyItemAtTodoTab(item: BookmarkModel) {
-        sharedViewModel.updateTodoState(item)
-    }
-
-
 }

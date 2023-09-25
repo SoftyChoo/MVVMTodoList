@@ -12,9 +12,9 @@ data class BookmarkModel(
     val isBookmark: Boolean = false
 ) : Parcelable
 
-fun BookmarkModel.toTodoModel() : TodoModel{
+fun BookmarkModel.toTodoModel(): TodoModel {
     return TodoModel(
-        id = id ,
+        id = id,
         title = title,
         description = description,
         isBookmark = isBookmark
