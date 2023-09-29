@@ -35,7 +35,6 @@ class MainSharedViewModel : ViewModel() {
 }
 
 sealed interface MainSharedEventForTodo {
-
     data class UpdateTodoItem(
         val item: TodoModel
     ) : MainSharedEventForTodo
@@ -43,7 +42,6 @@ sealed interface MainSharedEventForTodo {
 
 
 sealed interface MainSharedEventForBookmark {
-
     data class UpdateBookmarkItems(
         val items: List<BookmarkModel>
     ) : MainSharedEventForBookmark

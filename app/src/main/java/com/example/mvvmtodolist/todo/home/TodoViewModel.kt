@@ -79,10 +79,11 @@ class TodoViewModel(
         _list.value = currentList
     }
 }
-
 class TodoViewModelFactory : ViewModelProvider.Factory {
 
-    private val repository = TodoRepositoryImpl()
+    private val todoRemoteDataSource = TodoRemoteDataSource()
+
+    private val repository = TodoRepositoryImpl(todoRemoteDataSource)
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
