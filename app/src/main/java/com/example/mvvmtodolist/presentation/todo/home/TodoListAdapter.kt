@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.todo.home
+package com.example.mvvmtodolist.presentation.todo.home
 
 import android.view.LayoutInflater
 import android.view.View

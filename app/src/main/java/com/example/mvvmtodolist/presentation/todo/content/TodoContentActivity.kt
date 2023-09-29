@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.todo.content
+package com.example.mvvmtodolist.presentation.todo.content
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.mvvmtodolist.R
 import com.example.mvvmtodolist.databinding.TodoAddActivityBinding
-import com.example.mvvmtodolist.todo.home.TodoModel
+import com.example.mvvmtodolist.presentation.todo.home.TodoModel
 
 
 

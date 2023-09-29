@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.bookmark
+package com.example.mvvmtodolist.presentation.bookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mvvmtodolist.databinding.BookmarkItemBinding
-import com.example.mvvmtodolist.todo.home.TodoModel
+import com.example.mvvmtodolist.presentation.todo.home.TodoModel
 
 class BookmarkListAdapter(
     private val onBookmarkChecked: (Int, BookmarkModel) -> Unit

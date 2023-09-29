@@ -1,7 +1,7 @@
-package com.example.mvvmtodolist.bookmark
+package com.example.mvvmtodolist.presentation.bookmark
 
 import android.os.Parcelable
-import com.example.mvvmtodolist.todo.home.TodoModel
+import com.example.mvvmtodolist.presentation.todo.home.TodoModel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

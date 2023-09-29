@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.todo.home
+package com.example.mvvmtodolist.presentation.todo.home
 
 import android.app.Activity
 import android.os.Build
@@ -14,10 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mvvmtodolist.databinding.TodoFragmentBinding
-import com.example.mvvmtodolist.main.MainSharedEventForTodo
-import com.example.mvvmtodolist.main.MainSharedViewModel
-import com.example.mvvmtodolist.todo.content.TodoContentActivity
-import com.example.mvvmtodolist.todo.content.TodoContentType
+import com.example.mvvmtodolist.presentation.main.MainSharedEventForTodo
+import com.example.mvvmtodolist.presentation.main.MainSharedViewModel
+import com.example.mvvmtodolist.presentation.todo.content.TodoContentActivity
+import com.example.mvvmtodolist.presentation.todo.content.TodoContentType
 import java.util.concurrent.atomic.AtomicLong
 
 class TodoFragment : Fragment() {

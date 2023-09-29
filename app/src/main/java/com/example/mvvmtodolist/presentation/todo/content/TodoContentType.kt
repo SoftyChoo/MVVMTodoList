@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.todo.content
+package com.example.mvvmtodolist.presentation.todo.content
 
 enum class TodoContentType {
     ADD, EDIT, REMOVE;

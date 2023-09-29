@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.main
+package com.example.mvvmtodolist.presentation.main
 
 import android.app.Activity
 import android.os.Build
@@ -8,14 +8,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mvvmtodolist.R
-import com.example.mvvmtodolist.bookmark.BookmarkFragment
-import com.example.mvvmtodolist.bookmark.BookmarkModel
-import com.example.mvvmtodolist.bookmark.toTodoModel
+import com.example.mvvmtodolist.presentation.bookmark.BookmarkFragment
+import com.example.mvvmtodolist.presentation.bookmark.BookmarkModel
+import com.example.mvvmtodolist.presentation.bookmark.toTodoModel
 import com.example.mvvmtodolist.databinding.MainActivityBinding
-import com.example.mvvmtodolist.todo.content.TodoContentActivity
-import com.example.mvvmtodolist.todo.home.TodoFragment
-import com.example.mvvmtodolist.todo.home.TodoModel
-import com.example.mvvmtodolist.todo.home.toBookmarkModel
+import com.example.mvvmtodolist.presentation.todo.content.TodoContentActivity
+import com.example.mvvmtodolist.presentation.todo.home.TodoFragment
+import com.example.mvvmtodolist.presentation.todo.home.TodoModel
+import com.example.mvvmtodolist.presentation.todo.home.toBookmarkModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 

@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.main
+package com.example.mvvmtodolist.presentation.main
 
 import androidx.fragment.app.Fragment
 

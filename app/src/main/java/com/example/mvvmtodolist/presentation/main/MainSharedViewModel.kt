@@ -1,12 +1,12 @@
-package com.example.mvvmtodolist.main
+package com.example.mvvmtodolist.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mvvmtodolist.bookmark.BookmarkModel
-import com.example.mvvmtodolist.bookmark.toTodoModel
-import com.example.mvvmtodolist.todo.home.TodoModel
-import com.example.mvvmtodolist.todo.home.toBookmarkModel
+import com.example.mvvmtodolist.presentation.bookmark.BookmarkModel
+import com.example.mvvmtodolist.presentation.bookmark.toTodoModel
+import com.example.mvvmtodolist.presentation.todo.home.TodoModel
+import com.example.mvvmtodolist.presentation.todo.home.toBookmarkModel
 
 class MainSharedViewModel : ViewModel() {
 

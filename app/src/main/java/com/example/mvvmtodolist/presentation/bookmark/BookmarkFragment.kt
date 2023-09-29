@@ -1,4 +1,4 @@
-package com.example.mvvmtodolist.bookmark
+package com.example.mvvmtodolist.presentation.bookmark
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
@@ -13,10 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.mvvmtodolist.databinding.BookmarkFragmentBinding
-import com.example.mvvmtodolist.main.MainActivity
-import com.example.mvvmtodolist.main.MainSharedEventForBookmark
-import com.example.mvvmtodolist.main.MainSharedViewModel
-import com.example.mvvmtodolist.todo.content.TodoContentActivity
+import com.example.mvvmtodolist.presentation.main.MainActivity
+import com.example.mvvmtodolist.presentation.main.MainSharedEventForBookmark
+import com.example.mvvmtodolist.presentation.main.MainSharedViewModel
+import com.example.mvvmtodolist.presentation.todo.content.TodoContentActivity
 
 class BookmarkFragment : Fragment() {
 
